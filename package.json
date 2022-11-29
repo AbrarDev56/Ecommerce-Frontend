@@ -8,7 +8,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "pinia": "^2.0.26",
+    "axios": "^1.2.0",
+    "bootstrap": "^5.2.3",
+    "pinia": "^2.0.27",
+    "pinia-plugin-persistedstate": "^3.0.1",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
