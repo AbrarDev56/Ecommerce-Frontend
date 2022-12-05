@@ -18,18 +18,20 @@
 </script>
 
 <template>
-    <div v-for="product in products" v-bind:key="product.id" class="mx-3">
-        <div class="card mb-3 mt-3 mx-auto" style="max-width: 1000px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <!-- <img :src="url + product.attributes.thumbnail.data.attributes.url" class="img-fluid"> -->
-                </div>
-                <div class="col-md-8">
+    <div class="row row-cols-1 row-cols-md-2 g-2 m-2">
+        <div v-for="product in products" v-bind:key="product.id">
+            <div class="col">
+                <div class="card">
+                    <RouterLink :to="`${product.id}`">
+                        <img src="..." class="card-img-top">
+                    </RouterLink>
                     <div class="card-body">
-                        <h5 class="card-title">{{ product.attributes.name }}</h5>
-                        <h5 class="card-title">{{ product.attributes.price }}</h5>
-                        <!-- <div v-html="product.attributes.article" class="card-text text-truncate" style="height: 75px"></div> -->
-                        <RouterLink :to="`${product.id}`" class="stretched-link"></RouterLink>
+                        <RouterLink :to="`${product.id}`" class="text-dark text-decoration-none">
+                            <h5 class="card-title">{{ product.attributes.name }}</h5>
+                        </RouterLink>
+                        <RouterLink :to="`${product.id}`" class="text-dark text-decoration-none">
+                            <h5 class="card-title">{{ product.attributes.price }}</h5>
+                        </RouterLink>
                     </div>
                 </div>
             </div>
