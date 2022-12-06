@@ -4,7 +4,7 @@
     import axios from 'axios'
 
     const products = ref([])
-    // const url = "http://localhost:1337"
+    const url = "http://localhost:1337"
     onMounted(() => {
         axios.get('products?populate=*')
             .then(response => {
@@ -18,12 +18,13 @@
 </script>
 
 <template>
-    <div class="row row-cols-1 row-cols-md-2 g-2 m-2">
-        <div v-for="product in products" v-bind:key="product.id">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-2 m-2">
+        
+        <div v-for="product in products" :key="product.id">
             <div class="col">
                 <div class="card">
                     <RouterLink :to="`${product.id}`">
-                        <img src="..." class="card-img-top">
+                        <img :src="url + product.attributes.thumbnail.data.attributes.url" class="img-fluid">
                     </RouterLink>
                     <div class="card-body">
                         <RouterLink :to="`${product.id}`" class="text-dark text-decoration-none">
