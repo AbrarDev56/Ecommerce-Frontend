@@ -26,7 +26,7 @@
                     <RouterLink :to="`${product.id}`">
                         <img :src="url + product.attributes.thumbnail.data.attributes.url" class="img-fluid">
                     </RouterLink>
-                    <div class="card-body">
+                    <div class="card-body border-top">
                         <RouterLink :to="`${product.id}`" class="text-dark text-decoration-none">
                             <h5 class="card-title">{{ product.attributes.name }}</h5>
                         </RouterLink>
