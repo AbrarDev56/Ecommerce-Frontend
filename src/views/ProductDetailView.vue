@@ -3,22 +3,6 @@
     import { onMounted, ref } from 'vue'
     import axios from 'axios'
 
-    import { Swiper, SwiperSlide } from 'swiper/vue';
-
-    // Import Swiper styles
-    import 'swiper/css';
-
-    // import "swiper/css/free-mode"
-    // import "swiper/css/navigation"
-    // import "swiper/css/thumbs"
-    // import './style.css';
-    import { FreeMode, Thumbs } from 'swiper';
-    let thumbsSwiper = null;
-
-    const setThumbsSwiper = (swiper) => {
-        thumbsSwiper = swiper;
-    }
-
     const name = ref()
     const price = ref()
     const thumbnail = ref()
@@ -46,71 +30,35 @@
 
 <template>
     <!-- Medium and Bigger Screen Product Detail -->
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <div class="col">
-                <div >
-                    <swiper @swiper="setThumbsSwiper" :direction="'vertical'"  :slidesPerView="3" :freeMode="true" :modules=[FreeMode,Thumbs] class="Swiper2">
-                        <swiper-slide v-for="picture in pictures"><img :src="url + picture.attributes.url" class="img-fluid mb-2" style="width: 100px;"></swiper-slide>
-                    </swiper>
-                </div>
-            </div>
-            <div class="col">
-                <div style="max-width: 500px;">
-                    <swiper :loop="true" :spaceBetween="1" :thumbs="{ swiper: thumbsSwiper }" :modules=[FreeMode,Thumbs] class="Swiper">
-                        <swiper-slide v-for="picture in pictures"><img :src="url + picture.attributes.url" class="img-fluid mb-2" style="width: 500px;"></swiper-slide>
-                    </swiper>
+    <div class="container mt-4">
+        <div class="row row-cols-1 row-cols-md-2">
+            <div class="col" style="max-width: 600px;">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-indicators" style="bottom: -40px">
+                        <button v-for="(picture, index) in pictures" type="button" data-bs-target="#carouselExampleIndicators" :data-bs-slide-to="index" :class="[' ', { 'active': index === 0 }]" aria-current="true" :aria-label="'Slide ' + index">
+                            <img :src="url + picture.attributes.url" class="d-block w-100" alt="...">
+                        </button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div v-for="(picture, index) in pictures" :class="['carousel-item', { 'active': index === 0 }]">
+                            <img :src="url + picture.attributes.url" class="d-block w-100" alt="...">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </div>
             <div class="col">
                 <h1 class="mt-2">{{ name }}</h1>
                 <div>${{ price }}</div>
+                    <button class="btn btn-primary btn-lg mt-2" type="button">Add to Cart</button>
             </div>
         </div>
     </div>
-
-    <!-- <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
-        <div class="carousel-indicators">
-            <div v-for="(picture, index) in pictures">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            </div>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div v-for="(picture, index) in pictures">
-                index:{{index}}
-                <div :class="['carousel-item', index === 0 , 'active']">
-                    <img :src="url + picture.attributes.url" class="d-block w-100" alt="...">
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div> -->
-
-
-    <!-- Small Screen Product Detail -->
-    <!-- <div class="container d-none d-lg-block mt-4">
-        <div class="row">
-            <div class="col col-sm-2 col-lg-1">
-                <div v-for="picture in pictures">
-                    <img :src="url + picture.attributes.url" class="img-fluid mb-2">
-                </div>
-            </div>
-            <div class="col">
-                <img :src="url + thumbnail" class="img-fluid" style="max-width: 500px;">
-            </div>
-            <div class="col">
-                <h1 class="mt-2">{{ name }}</h1>
-                <div>${{ price }}</div>
-            </div>
-        </div>
-    </div> -->
 </template>
