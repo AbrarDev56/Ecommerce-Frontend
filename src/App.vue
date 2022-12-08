@@ -12,7 +12,7 @@
     <!-- Medium and Bigger Screen Navbar -->
     <nav class="navbar navbar-expand-sm bg-light d-none d-md-block">
         <div class="container-fluid">
-            <RouterLink class="navbar-brand" to="/">Ecommerce</RouterLink>
+            <RouterLink class="navbar-brand" to="/">Ecommerce Test</RouterLink>
             <div class="input-group me-3">
                 <input type="text" class="form-control" placeholder="Search Ecommerce" aria-label="Search" aria-describedby="button-addon2">
                 <button @click="$router.push('/search')" role="link" class="btn btn-warning" type="button" id="button-addon2">Search</button>
