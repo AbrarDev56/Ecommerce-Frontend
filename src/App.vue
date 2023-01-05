@@ -1,5 +1,4 @@
 <script setup>
-    import Cart from '@/components/CartIcon.vue'
     import Profile from '@/components/ProfileIcon.vue'
     import { RouterLink, RouterView } from 'vue-router'
     import { useAuthStore } from "@/stores/auth"
@@ -21,7 +20,6 @@
                 <RouterLink v-if="!isAuthenticated" class="nav-link" to="/login">Login</RouterLink>
                 <RouterLink v-if="!isAuthenticated" class="nav-link" to="/signup">Register</RouterLink>
                 <RouterLink v-if="isAuthenticated" class="nav-link" to="/profile"><Profile /></RouterLink>
-                <RouterLink v-if="isAuthenticated" class="nav-link" to="/cart"><Cart /></RouterLink>
             </div>
         </div>
     </nav>

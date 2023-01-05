@@ -2,14 +2,11 @@
     import { useRoute } from 'vue-router';
     import { onMounted, ref } from 'vue'
     import axios from 'axios'
-    import { useAuthStore } from "@/stores/auth"
 
-    const authStore = useAuthStore();
-
-    const profile = ref()
     const id = ref()
     const name = ref()
     const price = ref()
+    const stripe_link = ref()
     const thumbnail = ref()
     const pictures = ref([])
     const url = "http://localhost:1337"
@@ -21,50 +18,16 @@
                 id.value = response.data.data.id
                 name.value = response.data.data.attributes.name
                 price.value = response.data.data.attributes.price
+                stripe_link.value = response.data.data.attributes.stripe_link
                 thumbnail.value = response.data.data.attributes.thumbnail.data.attributes.url
                 pictures.value = response.data.data.attributes.pictures.data
-                // console.log(response.data.data)
-                // console.log(thumbnail.value)
-                // console.log(pictures.value)
+                console.log(response.data.data)
                 document.name = 'Ecommerce | ' + name.value
             })
             .catch(error => {
                 console.log(error)
             })
-
-        axios.get('users/me', {
-            headers: {
-                'Authorization': `Bearer ${authStore.token}`
-            }
-        })
-            .then(response => {
-                profile.value = (response.data.id)
-                console.log(response.data.id)
-            })
-            .catch(error => {
-                console.log(error)
-            })
     })
-    //http://localhost:1337/api/users/1
-    const product_id = ref('')
-    function addCart(product_id) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${authStore.token}`;
-        axios(`users/${profile.value}`, {
-            cart2: [
-                {
-                    product: product_id,
-                    quantity: 1
-                }
-            ]
-        })
-            .then(response => {
-                console.log(product_id)
-                console.log(response.data.data)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
 </script>
 
 <template>
@@ -96,7 +59,7 @@
             <div class="col">
                 <h1 class="mt-2">{{ name }}</h1>
                 <div>${{ price }}</div>
-                <button @click="addCart(id)" class="btn btn-primary btn-lg mt-2" type="button">Add to Cart</button>
+                <a :href="stripe_link" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg mt-2" type="button">Buy Now</a>
             </div>
         </div>
     </div>
