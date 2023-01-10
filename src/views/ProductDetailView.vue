@@ -3,12 +3,20 @@
     import { onMounted, ref } from 'vue'
     import axios from 'axios'
 
+    import { storeToRefs } from 'pinia';
+    import { useAuthStore } from "@/stores/auth"
+
+    const { isAuthenticated } = storeToRefs(useAuthStore())
+    const authStore = useAuthStore();
+
     const id = ref()
     const name = ref()
     const price = ref()
+    const description = ref()
     const stripe_link = ref()
     const thumbnail = ref()
     const pictures = ref([])
+    const reviews = ref([])
     const url = "http://localhost:1337"
     const route = useRoute();
     onMounted(() => {
@@ -18,20 +26,50 @@
                 id.value = response.data.data.id
                 name.value = response.data.data.attributes.name
                 price.value = response.data.data.attributes.price
+                description.value = response.data.data.attributes.description
                 stripe_link.value = response.data.data.attributes.stripe_link
                 thumbnail.value = response.data.data.attributes.thumbnail.data.attributes.url
                 pictures.value = response.data.data.attributes.pictures.data
+                reviews.value = response.data.data.attributes.reviews.data
                 console.log(response.data.data)
                 document.name = 'Ecommerce | ' + name.value
             })
             .catch(error => {
                 console.log(error)
             })
+
+        axios.get(`products/${product_detail}?populate[reviews][populate][0]=author`)
+            .then(response => {
+                reviews.value = response.data.data.attributes.reviews.data
+                console.log('reviews', response.data.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     })
+
+    const review = ref('')
+    function addReview() {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${authStore.token}`;
+        axios.post(`products/${id.value}/review`, {
+            data: {
+                review: review.value,
+                user: 3,
+                product: 5
+            }
+        })
+            .then(response => {
+                review.value = ''
+                location.reload();
+                console.log(response.data.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 </script>
 
 <template>
-    <!-- Medium and Bigger Screen Product Detail -->
     <div class="container mt-4">
         <div class="row row-cols-1 row-cols-md-2">
             <div class="col" style="max-width: 600px;">
@@ -56,10 +94,39 @@
                     </button>
                 </div>
             </div>
-            <div class="col">
-                <h1 class="mt-2">{{ name }}</h1>
-                <div>${{ price }}</div>
+            <div class="col d-none d-md-block">
+                <h1>{{ name }}</h1>
+                <div class="fs-4 fw-semibold">${{ price }}</div>
                 <a :href="stripe_link" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg mt-2" type="button">Buy Now</a>
+            </div>
+            <div class="col mt-5 d-block d-md-none">
+                <h1 class="mt-2">{{ name }}</h1>
+                <div class="fs-4 fw-semibold">${{ price }}</div>
+                <a :href="stripe_link" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg mt-2" type="button">Buy Now</a>
+            </div>
+        </div>
+        <div style="margin-top: 10%;">
+            <h3>Description</h3>
+            <p v-html="description"></p>
+            <div>
+                <div v-for="picture in pictures">
+                    <img :src="url + picture.attributes.url" class="w-100 mb-3" alt="...">
+                </div>
+            </div>
+        </div>
+        <h3>Reviews</h3>
+        <form v-if="isAuthenticated" v-on:submit.prevent="addReview">
+            <div class="input-group mb-3">
+                <input v-model="review" class="form-control" type="text" placeholder="Add Review">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+        <div v-for="review in reviews">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div>by {{ review.attributes.author.data.attributes.username }}</div>
+                    <div>{{ review.attributes.review }}</div>
+                </div>
             </div>
         </div>
     </div>
