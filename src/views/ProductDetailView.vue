@@ -53,9 +53,7 @@
         axios.defaults.headers.common['Authorization'] = `Bearer ${authStore.token}`;
         axios.post(`products/${id.value}/review`, {
             data: {
-                review: review.value,
-                user: 3,
-                product: 5
+                review: review.value
             }
         })
             .then(response => {
